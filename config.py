@@ -43,10 +43,17 @@ class EditionConfig:
     label: str
     source_path: Path
     collections: Mapping[str, str]
+    source_files: Mapping[str, tuple[str, ...]]
     source_name: str
 
 
-def _edition(key: str, label: str, source_path: Path, source_name: str) -> EditionConfig:
+def _edition(
+    key: str,
+    label: str,
+    source_path: Path,
+    source_name: str,
+    source_files: Mapping[str, tuple[str, ...]],
+) -> EditionConfig:
     return EditionConfig(
         key=key,
         label=label,
@@ -54,6 +61,7 @@ def _edition(key: str, label: str, source_path: Path, source_name: str) -> Editi
         collections=MappingProxyType(
             {domain: f"rules_{key}_{domain}" for domain in RULE_DOMAINS}
         ),
+        source_files=MappingProxyType(dict(source_files)),
         source_name=source_name,
     )
 
@@ -66,6 +74,26 @@ EDITIONS: Mapping[str, EditionConfig] = MappingProxyType(
             label="D&D 5e (SRD)",
             source_path=DATA_DIR,
             source_name="Repository 5e SRD JSON corpus",
+            source_files={
+                "rules": (
+                    "5e-SRD-Ability-Scores.json", "5e-SRD-Alignments.json",
+                    "5e-SRD-Backgrounds.json", "5e-SRD-Classes.json",
+                    "5e-SRD-Conditions.json", "5e-SRD-Damage-Types.json",
+                    "5e-SRD-Features.json", "5e-SRD-Feats.json",
+                    "5e-SRD-Languages.json", "5e-SRD-Levels.json",
+                    "5e-SRD-Magic-Schools.json", "5e-SRD-Proficiencies.json",
+                    "5e-SRD-Races.json", "5e-SRD-Rule-Sections.json",
+                    "5e-SRD-Rules.json", "5e-SRD-Skills.json",
+                    "5e-SRD-Subclasses.json", "5e-SRD-Subraces.json",
+                    "5e-SRD-Traits.json",
+                ),
+                "creatures": ("5e-SRD-Monsters.json",),
+                "spells": ("5e-SRD-Spells.json",),
+                "items": (
+                    "5e-SRD-Equipment.json", "5e-SRD-Equipment-Categories.json",
+                    "5e-SRD-Magic-Items.json", "5e-SRD-Weapon-Properties.json",
+                ),
+            },
         ),
     }
 )

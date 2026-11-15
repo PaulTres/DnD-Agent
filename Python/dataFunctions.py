@@ -1,99 +1,54 @@
-import os
-import json
-import pandas as pd
-import numpy as np
-from sentence_transformers import SentenceTransformer
-import faiss
-import pickle
+"""Compatibility helpers for the legacy console prototype.
+
+Retrieval now delegates to the application's edition-scoped Chroma collections;
+this module no longer builds or loads a FAISS index.
+"""
+
+from __future__ import annotations
+
+from dnd_agent.retrieval import EditionKnowledgeBase
 
 
-def split_into_chunks(text, max_words=100, overlap=20):
+def split_into_chunks(text: str, max_words: int = 100, overlap: int = 20) -> list[str]:
+    """Retained for old callers; production chunking uses the shared text splitter."""
+    if max_words < 1 or overlap < 0 or overlap >= max_words:
+        raise ValueError("Require max_words > overlap >= 0.")
     words = text.split()
-    chunks = []
-    for i in range(0, len(words), max_words - overlap):
-        chunk = " ".join(words[i:i + max_words])
-        chunks.append(chunk)
-    return chunks
+    step = max_words - overlap
+    return [" ".join(words[start:start + max_words]) for start in range(0, len(words), step)]
 
 
-def load_texts_from_folder(folder_path):
-    chunks = []
-
-    for filename in os.listdir(folder_path):
-        filepath = os.path.join(folder_path, filename)
-
-        if filename.endswith('.txt') or filename.endswith('.md'):
-            with open(filepath, 'r', encoding='utf-8') as f:
-                text = f.read()
-                chunks.extend(split_into_chunks(text))
-
-        elif filename.endswith('.csv'):
-            df = pd.read_csv(filepath)
-            for _, row in df.iterrows():
-                row_text = " | ".join([f"{col}: {val}" for col, val in row.items()])
-                chunks.extend(split_into_chunks(row_text))
-
-        elif filename.endswith('.json'):
-            with open(filepath, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-
-                if isinstance(data, list):
-                    for item in data:
-                        item_text = json.dumps(item, ensure_ascii=False)
-                        chunks.extend(split_into_chunks(item_text))
-                elif isinstance(data, dict):
-                    item_text = json.dumps(data, ensure_ascii=False)
-                    chunks.extend(split_into_chunks(item_text))
-
-    return chunks
-
-
-def build_prompt(context, question):
+def build_prompt(context: list[str], question: str) -> str:
     context_text = "\n".join(context)
     return f"Context:\n{context_text}\n\nQuestion: {question}\nAnswer:"
 
 
-def retrieve_context(query, embedder, index, metadata, top_k=3):
-    query_vec = embedder.encode([query], convert_to_tensor=False)
-    distances, indices = index.search(np.array(query_vec), top_k)
-    context=''
-    for i in indices[0]:
-        context+=metadata[i]
-    return context
+def prepare_embeddings(force_reload: bool = False):
+    """Return the Chroma knowledge base through the former helper's tuple shape.
+
+    Run ``python -m dnd_agent.ingest --edition 5e_srd`` to ingest the corpus.
+    ``force_reload`` is preserved as an explicit re-ingest option.
+    """
+    knowledge_base = EditionKnowledgeBase()
+    if force_reload:
+        knowledge_base.ingest_edition("5e_srd")
+    return None, knowledge_base, None
 
 
-def prepare_embeddings(force_reload=False):
-    if not force_reload and os.path.exists('Embeddings/faiss_index.idx') and os.path.exists('Embeddings/metadata.pkl'):
-        print("Loading saved FAISS index and metadata...")
-        index = faiss.read_index('Embeddings/faiss_index.idx')
-        with open('Embeddings/metadata.pkl', 'rb') as f:
-            metadata = pickle.load(f)
-        embedder = SentenceTransformer('paraphrase-MiniLM-L3-v2')
-        return embedder, index, metadata
-
-    print("Embedding from scratch...")
-    embedder = SentenceTransformer('paraphrase-MiniLM-L3-v2')
-    folder_path = '../Data'
-    passages = load_texts_from_folder(folder_path)
-    embeddings = embedder.encode(passages)
-
-    index = faiss.IndexFlatL2(embeddings.shape[1])
-    index.add(np.array(embeddings))
-    metadata = passages
-
-    # Save for future use
-    faiss.write_index(index, 'Embeddings/faiss_index.idx')
-    with open('Embeddings/metadata.pkl', 'wb') as f:
-        pickle.dump(metadata, f)
-
-    return embedder, index, metadata
-
-
-
-
-# print("Loading LLaMA model...")
-# llm = Llama(model_path="C:\\Users\\Ana\\.lmstudio\\models\\NousResearch\\Hermes-3-Llama-3.2-3B-GGUF\\Hermes-3-Llama-3.2-3B.Q4_K_M.gguf",
-#             n_ctx=8192,
-#             verbose=False)
-
-
+def retrieve_context(query: str, embedder, index, metadata, top_k: int = 3) -> str:
+    """Search the configured 5e Chroma domains and include source labels."""
+    del embedder, metadata
+    if not isinstance(index, EditionKnowledgeBase):
+        raise TypeError("Expected the Chroma knowledge base returned by prepare_embeddings().")
+    matches = []
+    for domain in ("rules", "creatures", "spells", "items"):
+        matches.extend(index.search(query, "5e_srd", domain, k=top_k))
+    matches.sort(key=lambda document: (
+        document.metadata.get("domain", ""),
+        document.metadata.get("source_title", ""),
+    ))
+    return "\n\n".join(
+        f"[Source: {doc.metadata.get('source_title', 'SRD')} · "
+        f"{doc.metadata.get('source_file', 'unknown')}]\n{doc.page_content}"
+        for doc in matches[:top_k]
+    )

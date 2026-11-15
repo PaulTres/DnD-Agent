@@ -39,12 +39,12 @@ Architecture reference: [architecture.drawio](architecture.drawio).
 
 ### 2. Local model and retrieval
 
-- [ ] Integrate a locally hosted chat model through LangChain using a configurable local provider/endpoint; fail clearly when unavailable.
-- [ ] Configure local embeddings and document-loading/chunking with source provenance.
-- [ ] Design edition-scoped Chroma collections by rules domain (for example rules, creatures, spells, and items) with stable metadata and provenance. Implement lazy creation/loading and cache collections only when an edition is selected or a tool needs them.
-- [ ] Ingest the existing 5e SRD JSON as the initial supported corpus; add other editions only from explicitly supplied/licensed data sources.
-- [ ] Ensure retrieval always filters by edition and returns source metadata; do not mix rules across editions.
-- [ ] Retire the FAISS index path after equivalent Chroma retrieval is in place.
+- [x] Integrate a locally hosted chat model through LangChain using a configurable local provider/endpoint; fail clearly when unavailable.
+- [x] Configure local embeddings and document-loading/chunking with source provenance.
+- [x] Design edition-scoped Chroma collections by rules domain (for example rules, creatures, spells, and items) with stable metadata and provenance. Implement lazy creation/loading and cache collections only when an edition is selected or a tool needs them.
+- [x] Ingest the existing 5e SRD JSON as the initial supported corpus; add other editions only from explicitly supplied/licensed data sources.
+- [x] Ensure retrieval always filters by edition and returns source metadata; do not mix rules across editions.
+- [x] Retire the FAISS index path after equivalent Chroma retrieval is in place.
 
 ### 3. Memory and adventure persistence
 
