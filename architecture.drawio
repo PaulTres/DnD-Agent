@@ -25,10 +25,10 @@
         <mxCell id="memory" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="Memory&#xa;Semantic: searchable facts&#xa;Local: structured current state&#xa;Episodic: searchable scene summaries&#xa;Filter by user_id / adventure_id" vertex="1">
           <mxGeometry height="160" width="270" x="1150" y="470" as="geometry" />
         </mxCell>
-        <mxCell id="persist" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="Local persistence&#xa;LangGraph checkpoints&#xa;Adventure records and inputs&#xa;Pause / resume metadata" vertex="1">
+        <mxCell id="persist" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="Local persistence&#xa;Stable profile / adventure IDs&#xa;Versioned adventure and checkpoint data&#xa;ZIP export manifest" vertex="1">
           <mxGeometry height="130" width="230" x="410" y="180" as="geometry" />
         </mxCell>
-        <mxCell id="config" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;" value="config.py&#xa;Edition registry&#xa;Dice registry&#xa;Collection names and local defaults" vertex="1">
+        <mxCell id="config" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;" value="config.py&#xa;Typed edition and dice registries&#xa;Environment-based local settings&#xa;Storage paths and bounded limits" vertex="1">
           <mxGeometry height="130" width="230" x="60" y="330" as="geometry" />
         </mxCell>
         <mxCell id="e1" edge="1" parent="1" source="ui" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" target="service">

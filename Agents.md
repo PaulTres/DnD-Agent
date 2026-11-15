@@ -27,4 +27,4 @@ These repository instructions apply to all Python implementation and maintenance
 
 ## Work sequencing
 
-Follow the phase order in [Plan.md](Plan.md). Mark checklist items complete only after their deliverables have been implemented and reviewed. This repository is currently at the planning/scaffolding stage.
+Follow the phase order in [Plan.md](Plan.md). Mark checklist items complete only after their deliverables have been implemented and reviewed. Phase 1 foundation and configuration are implemented; do not claim later phases are complete until their deliverables are reviewed.

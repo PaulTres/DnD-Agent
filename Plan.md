@@ -31,11 +31,11 @@ Architecture reference: [architecture.drawio](architecture.drawio).
 
 ### 1. Foundation and configuration
 
-- [ ] Establish the Python package structure, dependency manifest, and Streamlit entry point.
-- [ ] Move shared runtime settings and registries to `config.py`; add environment-based overrides for local model endpoint/path, embedding model, Chroma location, checkpoint location, and limits.
-- [ ] Define typed edition metadata, stable edition identifiers, source-data locations, and collection names. Add no unsupported rule data by assumption.
-- [ ] Define persistent local storage layout, stable user/adventure identifiers, schema versions, and backup/export format.
-- [ ] Keep model weights, local credentials if any, vector databases, checkpoints, and user saves out of source control.
+- [x] Establish the Python package structure, dependency manifest, and Streamlit entry point.
+- [x] Move shared runtime settings and registries to `config.py`; add environment-based overrides for local model endpoint/path, embedding model, Chroma location, checkpoint location, and limits.
+- [x] Define typed edition metadata, stable edition identifiers, source-data locations, and collection names. Add no unsupported rule data by assumption.
+- [x] Define persistent local storage layout, stable user/adventure identifiers, schema versions, and backup/export format.
+- [x] Keep model weights, local credentials if any, vector databases, checkpoints, and user saves out of source control.
 
 ### 2. Local model and retrieval
 

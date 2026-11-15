@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-dnd-adventure-agent"
+version = "0.1.0"
+description = "A local, multi-edition D&D adventure agent"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "streamlit>=1.40,<2",
+    "langchain-core>=0.3,<2",
+    "langchain-openai>=0.2,<2",
+    "langgraph>=0.2,<2",
+    "langchain-chroma>=0.1,<2",
+    "chromadb>=0.5,<2",
+    "langchain-huggingface>=0.1,<2",
+    "sentence-transformers>=3,<6",
+]
+
+[tool.setuptools]
+packages = ["dnd_agent"]
+py-modules = ["config"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
