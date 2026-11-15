@@ -172,7 +172,13 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-<<<<<<< HEAD
+# Local model weights and runtime-generated user data
 *.gguf
-=======
->>>>>>> parent of e69431c (Added model.)
+*.safetensors
+*.pt
+*.pth
+*.bin
+runtime/chroma/
+runtime/checkpoints/
+runtime/adventures/
+runtime/models/

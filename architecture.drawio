@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="dnd-agent-architecture" name="Architecture">
+    <mxGraphModel dx="3093" dy="838" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ui" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;direction=south;" value="Streamlit UI&#xa;Edition dropdown&#xa;World / character text or upload&#xa;Workflow and saved adventures" vertex="1">
+          <mxGeometry height="150" width="250" x="-30" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" value="Adventure Service&#xa;Validate player inputs&#xa;Save / pause / resume" vertex="1">
+          <mxGeometry height="130" width="220" x="280" as="geometry" />
+        </mxCell>
+        <mxCell id="graph" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" value="LangGraph Runtime&#xa;Workflow router&#xa;ReAct graph&#xa;Plan → Execute → Revise graph" vertex="1">
+          <mxGeometry height="160" width="250" x="660" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="llm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;" value="Local LLM&#xa;LangChain chat model&#xa;Adventure narration and planning" vertex="1">
+          <mxGeometry height="120" width="230" x="1150" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tools" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" value="LangChain Tools&#xa;Dice roller (d4–d100)&#xa;Monster generator&#xa;Rule retrieval and memory tools" vertex="1">
+          <mxGeometry height="150" width="250" x="660" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="rules" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="Lazy edition Chroma collections&#xa;rules_{edition}_{domain}&#xa;Rules / creatures / spells / items&#xa;edition metadata filter" vertex="1">
+          <mxGeometry height="150" width="270" x="1150" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="memory" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="Memory&#xa;Semantic: searchable facts&#xa;Local: structured current state&#xa;Episodic: searchable scene summaries&#xa;Filter by user_id / adventure_id" vertex="1">
+          <mxGeometry height="160" width="270" x="1150" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="persist" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="Local persistence&#xa;LangGraph checkpoints&#xa;Adventure records and inputs&#xa;Pause / resume metadata" vertex="1">
+          <mxGeometry height="130" width="230" x="410" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="config" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;" value="config.py&#xa;Edition registry&#xa;Dice registry&#xa;Collection names and local defaults" vertex="1">
+          <mxGeometry height="130" width="230" x="60" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="ui" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" target="service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="graph">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="graph" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" target="llm" value="local model calls">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="graph" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" target="tools" value="tool calls">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" target="rules" value="edition-scoped retrieval">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" target="memory" value="read / update">
+          <mxGeometry relative="1" x="-0.0967" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="graph" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="persist" value="checkpoint / restore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="config" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;dashed=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" target="service" value="configures">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="config" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;dashed=1;" target="tools" value="registry / defaults">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
